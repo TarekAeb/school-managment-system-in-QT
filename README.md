@@ -1,9 +1,43 @@
-# Student-Managment-System-on-QT:
-A system Managment System developed using Qt in C++ (OOP) language creator having good UI and UX experience.
+# Student Management System on QT
 
-## Project Description:
+This is a Student Management System developed using Qt in C++ (OOP) language, designed to provide a user-friendly interface and experience.
 
-This application is released under the GPL3 lisence you may check the LICENCE file provided in the project folder. This project is about creating a platform that permit the users wich is admin, teacher and student. 
-The admin can create users (teacher, student) and courses and shedule them. 
-The teacher can 
-The student can see his/her information and change the permitted one for example the 
+## Project Description
+
+This application is released under the GPL3 license. Please refer to the LICENSE file provided in the project folder for more details. The primary objective of this project is to create a platform that facilitates users, including administrators, teachers, and students.
+
+- **Administrator Functions:**
+  - Create users (teachers, students).
+  - Create courses and schedule them.
+  - Control the system, including adding/removing teachers, students, courses, etc.
+  - Update administrator's information. The default administrator ID is "0000000001" with the password "admin".
+
+- **Teacher Functions:**
+  - Assign marks to students based on assigned modules.
+  - Update their own password.
+  - Access a personalized dashboard.
+
+- **Student Functions:**
+  - View personal information.
+  - Change permitted information (e.g., password).
+  - Limited access for security reasons.
+
+## How to Run
+
+1. When running the application for the first time, it will prompt you to choose a password for data storage.
+2. Replace the automatically created 'assets' folder with the one located in the repository.
+3. To access the system:
+   - Use ID: 0000000001
+   - Password: "admin"
+
+## User Manual
+
+### System Credentials:
+
+- Name: Must contain two words, each with more than three characters.
+- ID: Must contain 10 digits.
+- Phone: Must contain 10 digits, starting with 0 as per Algerian credentials.
+- Email: Must be the Ensia email.
+- Date: Must be of the format YYYY-MM-DD
+
+Ensure compliance with these criteria while using the system.
