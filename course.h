@@ -5,7 +5,7 @@
 #include <string>
 #include <sstream>
 #include <ctime>
-#include <QDateTime> // Include QDateTime for handling dates and times
+#include <QDateTime>
 #include <QFile>
 #include<QTextStream>
 #include"settingsmanager.h"
@@ -34,7 +34,7 @@ public:
 
 private:
     std::string name;
-    QDateTime schedule; // Change type to QDateTime
+    QDateTime schedule;
     float midterm;
     float final;
     float cc;

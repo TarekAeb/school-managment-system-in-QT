@@ -4,7 +4,7 @@
 #include"settingsmanager.h"
 #include <QWidget>
 #include<chrono>
-// #include<string>
+
 using std::string;
 namespace Ui {
 class Admin_dashboard;

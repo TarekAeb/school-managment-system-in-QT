@@ -61,7 +61,7 @@ float Course::validateMark(const float& mark) const {
 
 void Course::storeInfo(const std::string &id) const{
     QString i = QString::fromStdString(id);
-    QString dir = "/home/tarek/ENSIASCHOOL/courses/" + QString::fromStdString(name) + ".txt";
+    QString dir = homepath+"/courses/" + QString::fromStdString(name) + ".txt";
     QFile file(dir);
     QString courseMid = QString::number(midterm, 'f', 2);
     QString courseFinal = QString::number(final, 'f', 2);
@@ -77,7 +77,7 @@ void Course::storeInfo(const std::string &id) const{
             if (parts.size() == 4) {
                 QString studentId = parts[0].trimmed();
                 if (studentId == i) {
-                    continue; // Skip appending this line again
+                    continue;
                 }
             }
             lines.append(content);
@@ -90,7 +90,7 @@ void Course::storeInfo(const std::string &id) const{
         for (const QString &line : lines) {
             out << line << "\n";
         }
-        // Add new student info regardless of existence
+
         out << i << ' ' << courseMid << ' ' << courseFinal << ' ' << courseCc << "\n";
         file.close();
     }

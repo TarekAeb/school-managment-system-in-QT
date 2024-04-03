@@ -17,7 +17,7 @@ Person::Person(const std::string &name, const std::string &id, const std::string
 
 Person::~Person()
 {
-    // Destructor implementation
+
 }
 
 void Person::setName(const std::string &name)
@@ -77,7 +77,7 @@ std::string Person::getDateOfBirth() const
 
 void Person::setPassword(const std::string &password)
 {
-    // Hash the password before storing it
+
     this->password = hashPassword(password);
 }
 
@@ -133,7 +133,7 @@ void Person::validateID(const std::string &id) const
 
 void Person::validateEmail(const std::string &email) const
 {
-    // Regular expression pattern for email ending with "@ensia.edu.dz"
+
     std::regex emailPattern(R"([a-zA-Z0-9._%+-]+@ensia.edu.dz)");
 
     if (!std::regex_match(email, emailPattern))
@@ -155,7 +155,7 @@ void Person::validatePhone(const std::string &phone) const
 
 void Person::validateDateOfBirth(const std::string &dateOfBirth) const
 {
-    // Regular expression pattern for date format "YYYY-MM-DD"
+
     std::regex datePattern("\\d{4}-\\d{2}-\\d{2}");
 
     if (!std::regex_match(dateOfBirth, datePattern))
@@ -163,12 +163,12 @@ void Person::validateDateOfBirth(const std::string &dateOfBirth) const
         throw std::invalid_argument("Invalid date format. Date must be in the format YYYY-MM-DD.");
     }
 
-    // Extracting year, month, and day from the date string
+
     int year = std::stoi(dateOfBirth.substr(0, 4));
     int month = std::stoi(dateOfBirth.substr(5, 2));
     int day = std::stoi(dateOfBirth.substr(8, 2));
 
-    // Checking the validity of the date components
+
     if ((year < 1900 )|| (year > 2100))
     {
         throw std::invalid_argument("Invalid year. Year must be between 1900 and 2100.");
@@ -179,13 +179,13 @@ void Person::validateDateOfBirth(const std::string &dateOfBirth) const
         throw std::invalid_argument("Invalid month. Month must be between 1 and 12.");
     }
 
-    // Checking for the number of days based on the month
+
     if ((day < 1 )|| (day > 31))
     {
         throw std::invalid_argument("Invalid day. Day must be between 1 and 31.");
     }
 
-    // Additional logic for checking days in specific months (e.g., February)
+
     if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30)
     {
         throw std::invalid_argument("Invalid day. April, June, September, and November have 30 days.");
@@ -193,7 +193,7 @@ void Person::validateDateOfBirth(const std::string &dateOfBirth) const
 
     if (month == 2)
     {
-        // Checking for leap year
+
         bool isLeapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
         if (day > 29 || (day > 28 && !isLeapYear))
         {

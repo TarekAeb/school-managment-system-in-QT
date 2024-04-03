@@ -10,17 +10,17 @@
 #include "mainwindow.h"
 
 QString createFoldersAndFile(const QString &selectedPath) {
-    // Set base folder path
+
     QString baseFolderPath = selectedPath + "/StudentManagement";
 
 
-    // Create the base folder
+
     QDir baseDir(baseFolderPath);
     if (!baseDir.exists()) {
         baseDir.mkpath(".");
     }
 
-    // Create subfolders
+
     QStringList subfolders;
     subfolders << "users/student" << "users/teacher" << "courses" << "assets";
 
@@ -31,7 +31,7 @@ QString createFoldersAndFile(const QString &selectedPath) {
         }
     }
 
-    // Create and write to file
+
     QFile file(baseFolderPath + "/users/0000000001.txt");
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);

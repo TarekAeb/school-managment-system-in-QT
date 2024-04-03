@@ -11,7 +11,6 @@
 #include "teacher.h"
 #include "student.h"
 #include "settingsmanager.h"
-
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -31,10 +30,10 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    admin *adm; // Corrected the pointer type to AdminWindow
-    student *stdn; // Corrected the pointer type to StudentWindow
-    teacher *tech; // Corrected the pointer type to TeacherWindow
-    QString homePath; // Corrected the variable name to match with the implementation
+    admin *adm;
+    student *stdn;
+    teacher *tech;
+    QString homePath;
 
     bool authenticateUser(const QString& filePath, const QString& password);
     void openAdminWindow(const QString &, const string &, const std::string& , const string &, const string &, const string &, const string &);

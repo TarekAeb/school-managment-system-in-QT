@@ -14,7 +14,7 @@ PathSelectionDialog::PathSelectionDialog(QWidget *parent) : QDialog(parent)
     connect(browseButton, &QPushButton::clicked, this, &PathSelectionDialog::browse);
     connect(okButton, &QPushButton::clicked, this, &PathSelectionDialog::accept);
 
-    layout->addWidget(label); // Add label to layout
+    layout->addWidget(label);
     layout->addWidget(lineEdit);
     layout->addWidget(browseButton);
     layout->addWidget(okButton);

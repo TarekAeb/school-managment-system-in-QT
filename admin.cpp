@@ -8,6 +8,8 @@
 #include"student.h"
 #include"course.h"
 #include<vector>
+#include<QCryptographicHash>
+#include<QByteArray>
 using namespace std;
 admin::admin(QWidget *parent,const string &Name, const string &id, const string &Phone, const string &Email,const string& Date,const string& Password)
     : QWidget(parent)
@@ -95,7 +97,7 @@ void admin::on_teacheraddbtn_clicked()
     std::string phone = phoneQ.toStdString();
     std::string password =passwordQ.toStdString();
     try{teacher teach(nullptr,name, id, phone, email, date,password, cours);}
-    catch(invalid_argument){QMessageBox::warning(this," ","");}
+    catch(invalid_argument){QMessageBox::warning(this,"Warning","Your input doesn't much our credentials");}
 
 }
 // remove teacher
@@ -103,7 +105,7 @@ void admin::on_teacherremovebtn_clicked()
 {
     QString idQ=ui->lineEdit_teacher_id_remove->text();
     ui->lineEdit_teacher_id_remove->clear();
-    QString addr=homepath+"users/teacher/"+idQ+".txt";
+    QString addr=homepath+"/users/teacher/"+idQ+".txt";
     QFile file(addr);
     try{
         if(file.exists()){
@@ -123,9 +125,9 @@ void admin::on_toolButton_2_clicked()
 {
     QString idQ = ui->lineEdit_teacher_id_add->text();
     QString cours = ui->lineEdit_teacher_course_add->text();
-    ui->lineEdit_teacher_id_remove->clear();
+    ui->lineEdit_teacher_id_add->clear();
     ui->lineEdit_teacher_course_add->clear();
-    QString addr = homepath+"users/teacher/" + idQ + ".txt";
+    QString addr = homepath+"/users/teacher/" + idQ + ".txt";
     QFile file(addr);
     if (!file.exists()) {
         QMessageBox::warning(this, "Warning", "No such teacher with this id, check the id.");
@@ -165,7 +167,7 @@ void admin::on_toolButton_clicked()
     QString cours=ui->lineEdit_teacher_course_add->text();
     ui->lineEdit_teacher_id_add->clear();
     ui->lineEdit_teacher_course_add->clear();
-    QString addr=homepath+"users/teacher/"+idQ+".txt";
+    QString addr=homepath+"/users/teacher/"+idQ+".txt";
     QFile file(addr);
     try{
         if(!file.exists()|| !file.open(QIODevice::Append | QIODevice::Text)){
@@ -193,7 +195,7 @@ void admin::on_toolButton_6_clicked()
     QString cours=ui->lineEdit_student_course_add->text();
     ui->lineEdit_student_id_add->clear();
     ui->lineEdit_student_course_add->clear();
-    QString addr=homepath+"users/student/"+idQ+".txt";
+    QString addr=homepath+"/users/student/"+idQ+".txt";
     QFile file(addr);
     try{
         if(!file.exists()|| !file.open(QIODevice::Append | QIODevice::Text)){
@@ -217,7 +219,7 @@ void admin::on_toolButton_5_clicked()
 {
     QString idQ = ui->lineEdit_student_id_add->text();
     QString cours = ui->lineEdit_student_course_add->text();
-    ui->lineEdit_student_id_remove->clear();
+    ui->lineEdit_student_id_add->clear();
     ui->lineEdit_student_course_add->clear();
     QString addr = homepath+"/users/student/" + idQ + ".txt";
     QFile file(addr);
@@ -255,9 +257,9 @@ void admin::on_toolButton_5_clicked()
 //remove student
 void admin::on_teacherremovebtn_3_clicked()
 {
-    QString idQ=ui->lineEdit_teacher_id_remove->text();
-    ui->lineEdit_teacher_id_remove->clear();
-    QString addr=homepath+"users/student/"+idQ+".txt";
+    QString idQ=ui->lineEdit_student_id_remove->text();
+    ui->lineEdit_student_id_remove->clear();
+    QString addr=homepath+"/users/student/"+idQ+".txt";
     QFile file(addr);
     try{
         if(file.exists()){
@@ -297,8 +299,8 @@ void admin::on_teacheraddbtn_3_clicked()
     std::string email = emailQ.toStdString();
     std::string phone = phoneQ.toStdString();
     std::string password =passwordQ.toStdString();
-    student *stdn=new student (name, id, phone, email, date,password, cours);
-    delete stdn;
+    try{student stdn(nullptr,name, id, phone, email, date,password, cours);}
+    catch(invalid_argument){QMessageBox::warning(this,"Warning","this informations doen't much our credentials");}
 }
 
 
@@ -351,8 +353,9 @@ void admin::on_toolButton_7_clicked()
     QString newEmail = ui->lineEdit_admin_email_update->text();
     QString newPassword = ui->lineEdit_admin_newpassword->text();
     QString oldPassword = ui->lineEdit_admin_oldpassword->text();
+    QByteArray hashedPassword = QCryptographicHash::hash(oldPassword.toUtf8(), QCryptographicHash::Sha256).toHex();
 
-    QString adminFilePath = homepath + "/users/admin.txt";
+    QString adminFilePath = homepath + "/users/"+QString::fromStdString(getID())+".txt";
     QFile file(adminFilePath);
 
     // Open the file in ReadWrite mode
@@ -366,9 +369,8 @@ void admin::on_toolButton_7_clicked()
         QString phone = in.readLine().trimmed();
         QString dateOfBirth = in.readLine().trimmed();
         QString password = in.readLine().trimmed();
-
         // Check if the old password matches the existing password
-        if (password == oldPassword) {
+        if (password.toUtf8() == hashedPassword) {
             // Update the admin information with new values
             name = newName;
             email = newEmail;

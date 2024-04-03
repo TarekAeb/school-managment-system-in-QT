@@ -15,6 +15,7 @@ teacher::teacher(QWidget *parent,const string& Name , const string& id,const str
     QString i=QString::fromStdString(id);
     QString addr= homepath+"/users/teacher/"+i+".txt";
     QFile file(addr);
+    uploadinformation();
     if (file.open(QIODevice::ReadOnly|QIODevice::Text)){
         QString fUllname;
         QString ID;
@@ -69,7 +70,7 @@ teacher::teacher(const string& Name , const string& id,const string& Phone ,cons
 {
     setCourse(courses);
     homepath= SettingsManager::loadSettings();
-    uploadinformation();
+
 }
 teacher::~teacher()
 {

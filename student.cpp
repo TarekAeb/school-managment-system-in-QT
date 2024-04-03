@@ -19,6 +19,7 @@ student::student(QWidget *parent, const string &Name, const string &id, const st
 
     QString addr= homepath+"/users/student/"+i+".txt";
     QFile file(addr);
+    uploadinformation();
     if (file.open(QIODevice::ReadOnly|QIODevice::Text)){
         QString fUllname;
         QString ID;

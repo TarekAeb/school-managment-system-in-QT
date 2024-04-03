@@ -13,7 +13,7 @@ class student;
 class student : public QWidget,public Person
 {
     Q_OBJECT
-    // static QString homepath = SettingsManager::loadSettings();
+
 public:
     explicit student(QWidget *parent = nullptr, const string& ="", const string& ="", const string& ="", const string& ="", const string & ="02/02/00", const string & ="", const vector<Course> & ={});
     student(const string& ="", const string& ="", const string& ="", const string& ="", const string & ="02/02/00", const string & ="", const vector<Course> & ={});
