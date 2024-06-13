@@ -1,10 +1,18 @@
 #ifndef STUDENT_H
 #define STUDENT_H
-#include<QObject>
-#include <QWidget>
 #include"person.h"
 #include"course.h"
 #include"settingsmanager.h"
+#include<QObject>
+#include <QWidget>
+#include<vector>
+#include<QFile>
+#include<QTextStream>
+#include<QMessageBox>
+#include<QString>
+#include<QPixmap>
+#include<QPalette>
+#include<QDir>
 using namespace std;
 namespace Ui {
 class student;
@@ -15,13 +23,13 @@ class student : public QWidget,public Person
     Q_OBJECT
 
 public:
-    explicit student(QWidget *parent = nullptr, const string& ="", const string& ="", const string& ="", const string& ="", const string & ="02/02/00", const string & ="", const vector<Course> & ={});
-    student(const string& ="", const string& ="", const string& ="", const string& ="", const string & ="02/02/00", const string & ="", const vector<Course> & ={});
+    explicit student(QWidget *parent = nullptr, const string& ="", const string& ="", const string& ="", const string& ="", const string & ="02/02/00", const string & ="", const vector<Course> & ={},int =0);
     ~student();
     void setCourse(vector<Course>);
     void retrieveCourse(Course);
     vector<Course> getCourses();
     void uploadinformation();
+    void loadImages();
 private slots:
     void on_toolButton_2_clicked();
 
@@ -31,7 +39,7 @@ private:
     string output_course();
     Ui::student *ui;
     vector<Course> course_enrolled;
-    QString homepath;
+
 };
 
 #endif // STUDENT_H

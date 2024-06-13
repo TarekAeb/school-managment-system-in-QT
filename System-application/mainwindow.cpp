@@ -30,11 +30,7 @@ void MainWindow::on_login_button_clicked() {
     const QString adminFilePath = QDir(homePath + "/users/").filePath(id+".txt");
     const QString studentFilePath = QDir(homePath + "/users/student/").filePath(id + ".txt");
     const QString teacherFilePath = QDir(homePath + "/users/teacher/").filePath(id + ".txt");
-    qDebug()<<adminFilePath;
-    qDebug()<<studentFilePath;
-    qDebug()<<QFile::exists(teacherFilePath);
-    qDebug()<<QFile::exists(studentFilePath);
-    qDebug()<<QFile::exists(adminFilePath);
+
     if (QFile::exists(adminFilePath)) {
         if (authenticateUser(adminFilePath, password)) {
             openAdminWindow(id, "John Doe", id.toStdString(), "0551234567", "john.doe@ensia.edu.dz", "2023-05-01", "securepassword");
@@ -67,10 +63,13 @@ bool MainWindow::authenticateUser(const QString& filePath, const QString& passwo
     QTextStream in(&file);
     for (int i = 0; i < 5; ++i) in.readLine(); // Skip first 5 lines
     const QString storedHashedPassword = in.readLine().trimmed();
-
     // Hash the provided password
     QByteArray hashedPassword = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256).toHex();
 
+    qDebug()<<"stored password"<<storedHashedPassword;
+    qDebug()<<"hashedPassword"<< hashedPassword;
+
+    qDebug()<< (hashedPassword == storedHashedPassword.toUtf8());
     if (hashedPassword == storedHashedPassword.toUtf8()) {
         return true;
     } else {

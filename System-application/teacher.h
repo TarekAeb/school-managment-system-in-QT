@@ -20,8 +20,7 @@ class teacher : public QWidget, public Person
     Q_OBJECT
 
 public:
-    explicit teacher(QWidget *parent = nullptr, const string&  ="", const string&  ="", const string&  ="", const string&  ="", const string&  ="02/02/00", const string & ="", const vector<Course>& ={});
-    teacher(const string&  ="", const string&  ="", const string&  ="", const string&  ="", const string&  ="02/02/00", const string & ="", const vector<Course>& ={});
+    explicit teacher(QWidget *parent = nullptr, const string&  ="", const string&  ="", const string&  ="", const string&  ="", const string&  ="02/02/00", const string & ="", const vector<Course>& ={}, int =0);
     ~teacher();
 
     void setCourse(vector<Course>);
@@ -37,7 +36,7 @@ private:
     float setMark(const QString &);
     bool check(const string &,const string& );
     bool check1(const string &,const string& );
-    QString homepath;
+
 };
 
 #endif // TEACHER_H

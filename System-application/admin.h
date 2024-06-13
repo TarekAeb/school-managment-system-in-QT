@@ -24,8 +24,6 @@ private slots:
 
     void on_teacherremovebtn_clicked();
 
-
-
     void on_toolButton_2_clicked();
 
     void on_toolButton_clicked();
@@ -43,10 +41,10 @@ private slots:
     void on_toolButton_3_clicked();
 
     void on_toolButton_7_clicked();
+    void uploadinformation();
 
 private:
     Ui::Admin_dashboard *ui;
-    QString homepath;
     void createCourse(const QString& , const QString& );
 };
 

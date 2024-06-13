@@ -1,25 +1,20 @@
 #include "student.h"
 #include "ui_student.h"
-#include<vector>
-#include<QFile>
-#include<QTextStream>
-#include"settingsmanager.h"
-#include<QMessageBox>
-#include<QString>
-#include<QPixmap>
-#include<QPalette>
-student::student(QWidget *parent, const string &Name, const string &id, const string &Phone, const string &Email, const string &date,const string& passwd,const vector<Course> &courses) : Person(Name, id, Phone, Email, date,passwd)
+
+
+student::student(QWidget *parent, const string &Name, const string &id, const string &Phone, const string &Email, const string &date,const string& passwd,const vector<Course> &courses,int n) : Person(Name, id, Phone, Email, date,passwd)
     , QWidget(parent)
     , ui(new Ui::student)
 {
-    homepath=SettingsManager::loadSettings();
+
     ui->setupUi(this);
+
     setCourse(courses);
     QString i=QString::fromStdString(id);
-
+    loadImages();
     QString addr= homepath+"/users/student/"+i+".txt";
     QFile file(addr);
-    uploadinformation();
+    if (n==1) uploadinformation();
     if (file.open(QIODevice::ReadOnly|QIODevice::Text)){
         QString fUllname;
         QString ID;
@@ -109,17 +104,12 @@ student::student(QWidget *parent, const string &Name, const string &id, const st
         return;
     }
 
-    ui->widget->setStyleSheet("background-image: url(:homepath+/assets/calender.jpg);");
-
+}
+void student::loadImages() {
+    QPixmap pix(QDir(homepath + "/assets/").filePath("calender.jpg"));
+    ui->photolabel->setPixmap(pix.scaled(800, 800, Qt::KeepAspectRatio));
 }
 
-student::student(const string& Name , const string& id,const string& Phone ,const string& Email ,const string& Date ,const string& passwd,const vector<Course>& courses)
-    :Person(Name,id,Phone,Email,Date,passwd)
-{
-    setCourse(courses);
-    homepath=SettingsManager::loadSettings();
-    uploadinformation();
-}
 void student::uploadinformation(){
     QString nameQ = QString::fromStdString(getName());
     QString idQ = QString::fromStdString(getID());
@@ -128,19 +118,23 @@ void student::uploadinformation(){
     QString dateOfbirthQ = QString::fromStdString(getDateOfBirth());
     QString passwordQ = QString::fromStdString(getPassword());
 
-
-    QString addr= homepath+"/users/student/"+idQ+".txt";
-    QFile file(addr);
-    if (!file.open(QIODevice::WriteOnly)){
-
-        QMessageBox::warning(this,"error","An error occurred: " + file.errorString());
-    } else {
-        QTextStream out(&file);
-        out << nameQ << "\n" << idQ << "\n" << emailQ << "\n" << phoneQ << "\n" << dateOfbirthQ << "\n" << passwordQ << "\n";
-        // for (int i = 0; i < course_enrolled.size(); i++){
-        //     out << course_enrolled[i].getName().c_str() << ',';
+    if (!checkexistance(idQ)){
+        QString addr= homepath+"/users/student/"+idQ+".txt";
+        QFile file(addr);
+        // if (file.exists()){
+        //     throw invalid_argument("A user with this id already exist.");
         // }
-        file.close();
+        if (!file.open(QIODevice::WriteOnly)){
+
+            QMessageBox::warning(this,"error","An error occurred: " + file.errorString());
+        } else {
+            QTextStream out(&file);
+            out << nameQ << "\n" << idQ << "\n" << emailQ << "\n" << phoneQ << "\n" << dateOfbirthQ << "\n" << passwordQ << "\n";
+            // for (int i = 0; i < course_enrolled.size(); i++){
+            //     out << course_enrolled[i].getName().c_str() << ',';
+            // }
+            file.close();
+        }
     }
     qDebug()<<"from student";
 }
@@ -299,4 +293,5 @@ void student::on_toolButton_2_clicked() {
     }
     ui->label_wrong_pass->setText("Error: Password not found in file.");
 }
+
 

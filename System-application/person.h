@@ -4,6 +4,9 @@
 #include <QCryptographicHash>
 #include <string>
 #include<QString>
+#include<QFile>
+#include<QDir>
+#include"settingsmanager.h"
 QT_BEGIN_NAMESPACE
 class Person {
 private:
@@ -14,6 +17,7 @@ private:
     std::string dateOfBirth;
     std::string password;
 
+
     std::string hashPassword(const std::string &password);
     void validateName(const std::string &name) const;
     void validateID(const std::string &id) const;
@@ -21,11 +25,12 @@ private:
     void validateEmail(const std::string &email) const;
     void validatePhone(const std::string &phone) const;
 public:
-    ~Person();
+
 
     Person(const std::string &name, const std::string &id, const std::string &phone,
            const std::string &email, const std::string &dateOfBirth, const std::string &password);
-
+    ~Person();
+    QString homepath;
     void setName(const std::string &name);
     std::string getName() const;
 
@@ -44,7 +49,8 @@ public:
     void setPassword(const std::string &password);
     std::string getPassword() const;
 
-
+    virtual void uploadinformation()=0;
+    bool checkexistance(QString);
 
 };
 

@@ -2,8 +2,7 @@
 #include <stdexcept>
 #include <cctype> // for isdigit
 #include <regex>
-#include<QString>
-#include<string>
+
 Person::Person(const std::string &name, const std::string &id, const std::string &phone,
                const std::string &email, const std::string &dateOfBirth, const std::string &password)
 {
@@ -13,6 +12,7 @@ Person::Person(const std::string &name, const std::string &id, const std::string
     setEmail(email);
     setDateOfBirth(dateOfBirth);
     setPassword(password);
+    homepath=SettingsManager::loadSettings();
 }
 
 Person::~Person()
@@ -200,6 +200,18 @@ void Person::validateDateOfBirth(const std::string &dateOfBirth) const
             throw std::invalid_argument("Invalid day. February has 28 or 29 days in a leap year.");
         }
     }
+}
+bool Person::checkexistance(QString idQ){
+    QString addr1= homepath+"/users/student/"+idQ+".txt";
+    QString addr2= homepath+"/users/"+idQ+".txt";
+    QString addr3= homepath+"/users/teacher/"+idQ+".txt";
+    QFile file1(addr1);
+    QFile file2(addr2);
+    QFile file3(addr3);
+    if (file1.exists())return true;
+    if (file2.exists())return true;
+    if (file3.exists())return true;
+    return false;
 }
 
 

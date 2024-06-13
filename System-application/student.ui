@@ -24,7 +24,7 @@ color:black;</string>
      <x>0</x>
      <y>0</y>
      <width>871</width>
-     <height>511</height>
+     <height>521</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -34,7 +34,7 @@ color:black;</string>
     <enum>QTabWidget::Triangular</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="StudentDashboard">
     <attribute name="title">
@@ -1172,14 +1172,17 @@ font: 300 8pt &quot;Ubuntu&quot;;</string>
     <attribute name="title">
      <string>Shedule</string>
     </attribute>
-    <widget class="QWidget" name="widget" native="true">
+    <widget class="QLabel" name="photolabel">
      <property name="geometry">
       <rect>
        <x>0</x>
        <y>0</y>
        <width>861</width>
-       <height>471</height>
+       <height>481</height>
       </rect>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </widget>

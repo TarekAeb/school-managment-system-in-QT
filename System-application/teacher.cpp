@@ -3,7 +3,7 @@
 #include<QRegularExpression>
 #include<QString>
 #include<string>
-teacher::teacher(QWidget *parent,const string& Name , const string& id,const string& Phone ,const string& Email ,const string& Date ,const string& passwd,const vector<Course>& courses)
+teacher::teacher(QWidget *parent,const string& Name , const string& id,const string& Phone ,const string& Email ,const string& Date ,const string& passwd,const vector<Course>& courses, int n)
     :Person(Name,id,Phone,Email,Date,passwd)
     ,QWidget(parent)
     , ui(new Ui::teacher)
@@ -15,7 +15,7 @@ teacher::teacher(QWidget *parent,const string& Name , const string& id,const str
     QString i=QString::fromStdString(id);
     QString addr= homepath+"/users/teacher/"+i+".txt";
     QFile file(addr);
-    uploadinformation();
+    if (n==1)uploadinformation();
     if (file.open(QIODevice::ReadOnly|QIODevice::Text)){
         QString fUllname;
         QString ID;
@@ -65,13 +65,6 @@ teacher::teacher(QWidget *parent,const string& Name , const string& id,const str
         return;
     }
 }
-teacher::teacher(const string& Name , const string& id,const string& Phone ,const string& Email ,const string& Date ,const string& passwd,const vector<Course>& courses)
-    :Person(Name,id,Phone,Email,Date,passwd)
-{
-    setCourse(courses);
-    homepath= SettingsManager::loadSettings();
-
-}
 teacher::~teacher()
 {
     delete ui;
@@ -89,20 +82,24 @@ void teacher::uploadinformation(){
     QString passwordQ = QString::fromStdString(getPassword());
 
 
-    QString addr=homepath+"/users/teacher/"+idQ+".txt";
-    qDebug()<<homepath;
-    qDebug()<<addr;
-    QFile file(addr);
-    if (!file.open(QIODevice::WriteOnly)){
+    if(!checkexistance(idQ)){
+        QString addr=homepath+"/users/teacher/"+idQ+".txt";
+        QFile file(addr);
 
-        QMessageBox::warning(this,"error","An error occurred: " + file.errorString());
-    } else {
-        QTextStream out(&file);
-        out << nameQ << "\n" << idQ << "\n" << emailQ << "\n" << phoneQ << "\n" << dateOfbirthQ << "\n" << passwordQ << "\n";
-        // for (int i = 0; i < courses_taught.size(); i++){
-        //     out << courses_taught[i].getName().c_str() << ',';
-        // }
-        file.close();
+        if (!file.open(QIODevice::WriteOnly)){
+
+            QMessageBox::warning(this,"error","An error occurred: " + file.errorString());
+        } else {
+            QTextStream out(&file);
+            out << nameQ << "\n" << idQ << "\n" << emailQ << "\n" << phoneQ << "\n" << dateOfbirthQ << "\n" << passwordQ << "\n";
+            // for (int i = 0; i < courses_taught.size(); i++){
+            //     out << courses_taught[i].getName().c_str() << ',';
+            // }
+            file.close();
+        }
+    }
+    else{
+        throw invalid_argument("A user with this id already exists");
     }
 }
 
@@ -213,3 +210,4 @@ void teacher::on_toolButton_2_clicked() {
     }
     ui->label_wrong_pass->setText("Error: Password wrong.");
 }
+

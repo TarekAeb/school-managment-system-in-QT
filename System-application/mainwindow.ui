@@ -196,7 +196,7 @@ font: 500 12pt &quot;Ubuntu Mono&quot;;</string>
      <bool>true</bool>
     </property>
     <property name="plainText">
-     <string>   Enter your ID given by you instructer in the school and password to access the platform.</string>
+     <string>   Enter your ID given by your instructer in the school and password to access the platform.</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">

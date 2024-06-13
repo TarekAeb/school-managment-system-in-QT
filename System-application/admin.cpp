@@ -10,6 +10,7 @@
 #include<vector>
 #include<QCryptographicHash>
 #include<QByteArray>
+#include"mainwindow.h"
 using namespace std;
 admin::admin(QWidget *parent,const string &Name, const string &id, const string &Phone, const string &Email,const string& Date,const string& Password)
     : QWidget(parent)
@@ -81,12 +82,6 @@ void admin::on_teacheraddbtn_clicked()
     QString phoneQ = ui->lineEdit_teacher_phone->text();
     QString passwordQ=ui->lineEdit_teacher_password->text();
 
-    ui->lineEdit_teacher_name->clear();
-    ui->lineEdit_teacher_id->clear();
-    ui->lineEdit_teacher_date->clear();
-    ui->lineEdit_teacher_email->clear();
-    ui->lineEdit_teacher_phone->clear();
-    ui->lineEdit_teacher_password->clear();
 
     vector<Course> cours;
 
@@ -96,8 +91,15 @@ void admin::on_teacheraddbtn_clicked()
     std::string email = emailQ.toStdString();
     std::string phone = phoneQ.toStdString();
     std::string password =passwordQ.toStdString();
-    try{teacher teach(nullptr,name, id, phone, email, date,password, cours);}
-    catch(invalid_argument){QMessageBox::warning(this,"Warning","Your input doesn't much our credentials");}
+    try{teacher teach(nullptr,name, id, phone, email, date,password, cours,1);}
+    catch(invalid_argument &e){QMessageBox::warning(this,"Warning",e.what());return;}
+
+    ui->lineEdit_teacher_name->clear();
+    ui->lineEdit_teacher_id->clear();
+    ui->lineEdit_teacher_date->clear();
+    ui->lineEdit_teacher_email->clear();
+    ui->lineEdit_teacher_phone->clear();
+    ui->lineEdit_teacher_password->clear();
 
 }
 // remove teacher
@@ -299,7 +301,7 @@ void admin::on_teacheraddbtn_3_clicked()
     std::string email = emailQ.toStdString();
     std::string phone = phoneQ.toStdString();
     std::string password =passwordQ.toStdString();
-    try{student stdn(nullptr,name, id, phone, email, date,password, cours);}
+    try{student stdn(nullptr,name, id, phone, email, date,password, cours,1);}
     catch(invalid_argument){QMessageBox::warning(this,"Warning","this informations doen't much our credentials");}
 }
 
@@ -352,8 +354,12 @@ void admin::on_toolButton_7_clicked()
     QString newName = ui->lineEdit_admin_name_update->text();
     QString newEmail = ui->lineEdit_admin_email_update->text();
     QString newPassword = ui->lineEdit_admin_newpassword->text();
+    QString newPhone = ui->lineEdit_admin_phone_update->text();
+    QString newDate = ui->lineEdit_admin_date_update->text();
     QString oldPassword = ui->lineEdit_admin_oldpassword->text();
     QByteArray hashedPassword = QCryptographicHash::hash(oldPassword.toUtf8(), QCryptographicHash::Sha256).toHex();
+
+    qDebug()<<"hashed password:"<<hashedPassword;
 
     QString adminFilePath = homepath + "/users/"+QString::fromStdString(getID())+".txt";
     QFile file(adminFilePath);
@@ -363,31 +369,26 @@ void admin::on_toolButton_7_clicked()
         QTextStream in(&file);
 
         // Read existing admin information
-        QString name = in.readLine().trimmed();
-        QString id = in.readLine().trimmed();
-        QString email = in.readLine().trimmed();
-        QString phone = in.readLine().trimmed();
-        QString dateOfBirth = in.readLine().trimmed();
-        QString password = in.readLine().trimmed();
+        for (int i = 0; i < 5; ++i) in.readLine(); // Skip first 5 lines
+        const QString storedHashedPassword = in.readLine().trimmed();
+        qDebug()<<"stored hashed password"<<storedHashedPassword;
         // Check if the old password matches the existing password
-        if (password.toUtf8() == hashedPassword) {
-            // Update the admin information with new values
-            name = newName;
-            email = newEmail;
-            password = newPassword;
-
-            // Return to the beginning of the file
-            file.seek(0);
-
-            // Write the updated admin information back to the file
-            QTextStream out(&file);
-            out << name << "\n"
-                << id << "\n"
-                << email << "\n"
-                << phone << "\n"
-                << dateOfBirth << "\n"
-                << password << "\n";
-
+        if (storedHashedPassword.toUtf8() == hashedPassword) {
+            try{
+                setName(newName.toStdString());
+                setEmail(newEmail.toStdString());
+                setPhone(newPhone.toStdString());
+                setDateOfBirth(newDate.toStdString());
+                setPassword(newPassword.toStdString());
+                uploadinformation();
+                MainWindow *i= new MainWindow(nullptr);
+                i->show();
+                this->close();
+            }
+            catch(invalid_argument& e){
+                QMessageBox::warning(nullptr,"Warning",e.what());
+                return;
+            }
             QMessageBox::information(this, "Success", "Admin information updated successfully!");
         } else {
             ui->label_wrong_pass->setText("Old password does not match!");
@@ -396,6 +397,26 @@ void admin::on_toolButton_7_clicked()
         file.close();
     } else {
         QMessageBox::critical(this, "Error", "Failed to open admin file for updating!");
+    }
+}
+void admin::uploadinformation(){
+    QString nameQ = QString::fromStdString(getName());
+    QString idQ = QString::fromStdString(getID());
+    QString emailQ = QString::fromStdString(getEmail());
+    QString phoneQ = QString::fromStdString(getPhone());
+    QString dateOfbirthQ = QString::fromStdString(getDateOfBirth());
+    QString passwordQ = QString::fromStdString(getPassword());
+
+
+    QString addr= homepath+"/users/"+idQ+".txt";
+    QFile file(addr);
+    if (!file.open(QIODevice::WriteOnly)){
+
+        QMessageBox::warning(this,"error","An error occurred: " + file.errorString());
+    } else {
+        QTextStream out(&file);
+        out << nameQ << "\n" << idQ << "\n" << emailQ << "\n" << phoneQ << "\n" << dateOfbirthQ << "\n" << passwordQ << "\n";
+        file.close();
     }
 }
 
